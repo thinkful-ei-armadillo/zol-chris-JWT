@@ -10,8 +10,15 @@ const AuthService = {
       .where({user_name})
       .first();
   },
+
   comparePasswords(password, hash){
     return bcrypt.compare(password, hash);
+  },
+
+  verifyJwt(token) {
+    return jwt.verify(token, config.JWT_SECRET, {
+      algorithms: ['HS256']
+    }); 
   },
 
   parseBasicToken(token){

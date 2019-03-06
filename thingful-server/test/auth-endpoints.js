@@ -25,9 +25,9 @@ describe('Auth endpoints', () => {
   before('cleanup', () => helpers.cleanTables(db));
   afterEach('cleanup', () => helpers.cleanTables(db));
 
-  describe.only('POST /api/auth/login', () => {
+  describe('POST /api/auth/login', () => {
     beforeEach('insert users', () => {
-      helpers.seedUsers(db, testUsers);
+      return helpers.seedUsers(db, testUsers);
     });
 
     const requiredFields = ['user_name', 'password'];
