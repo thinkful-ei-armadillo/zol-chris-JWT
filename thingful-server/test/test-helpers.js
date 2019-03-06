@@ -254,6 +254,8 @@ function seedThingsTables(db, users, things, reviews=[]) {
     .then(() =>
       reviews.length && db.into('thingful_reviews').insert(reviews)
     )
+    .catch(error =>
+      console.log(error))
 }
 
 function seedMaliciousThing(db, user, thing) {
