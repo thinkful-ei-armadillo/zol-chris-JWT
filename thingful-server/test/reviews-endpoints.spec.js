@@ -1,8 +1,9 @@
 const knex = require('knex')
 const app = require('../src/app')
 const helpers = require('./test-helpers')
+const jwt = require('jsonwebtoken')
 
-describe('Reviews Endpoints', function() {
+describe.only('Reviews Endpoints', function() {
   let db
 
   const {
@@ -33,19 +34,28 @@ describe('Reviews Endpoints', function() {
       )
     )
 
+
     it(`creates an review, responding with 201 and the new review`, function() {
       this.retries(3)
       const testThing = testThings[0]
       const testUser = testUsers[0]
+      const expectedToken = jwt.sign(
+        { user_id: testUser.id }, 
+        process.env.JWT_SECRET, 
+        {
+          subject: testUser.user_name, 
+          algorithm: 'HS256'}
+      );
       const newReview = {
         text: 'Test new review',
         rating: 3,
         thing_id: testThing.id,
         user_id: testUser.id,
       }
+
       return supertest(app)
         .post('/api/reviews')
-        .set('Authorization', helpers.makeAuthHeader(testUser))
+        .set('Authorization', helpers.makeAuthHeader(testUser, expectedToken))
         .send(newReview)
         .expect(201)
         .expect(res => {
@@ -82,6 +92,14 @@ describe('Reviews Endpoints', function() {
     requiredFields.forEach(field => {
       const testThing = testThings[0]
       const testUser = testUsers[0]
+      const expectedToken = jwt.sign(
+        { user_id: testUser.id }, 
+        process.env.JWT_SECRET, 
+        {
+          subject: testUser.user_name, 
+          algorithm: 'HS256'}
+      )
+      
       const newReview = {
         text: 'Test new review',
         rating: 3,
@@ -94,7 +112,7 @@ describe('Reviews Endpoints', function() {
 
         return supertest(app)
           .post('/api/reviews')
-          .set('Authorization', helpers.makeAuthHeader(testUser))
+          .set('Authorization', helpers.makeAuthHeader(testUser, expectedToken))
           .send(newReview)
           .expect(400, {
             error: `Missing '${field}' in request body`,
