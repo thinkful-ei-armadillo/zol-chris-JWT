@@ -39,13 +39,6 @@ describe.only('Reviews Endpoints', function() {
       this.retries(3)
       const testThing = testThings[0]
       const testUser = testUsers[0]
-      const expectedToken = jwt.sign(
-        { user_id: testUser.id }, 
-        process.env.JWT_SECRET, 
-        {
-          subject: testUser.user_name, 
-          algorithm: 'HS256'}
-      );
       const newReview = {
         text: 'Test new review',
         rating: 3,
@@ -55,7 +48,7 @@ describe.only('Reviews Endpoints', function() {
 
       return supertest(app)
         .post('/api/reviews')
-        .set('Authorization', helpers.makeAuthHeader(testUser, expectedToken))
+        .set('Authorization', helpers.makeAuthHeader(testUser))
         .send(newReview)
         .expect(201)
         .expect(res => {
@@ -92,14 +85,6 @@ describe.only('Reviews Endpoints', function() {
     requiredFields.forEach(field => {
       const testThing = testThings[0]
       const testUser = testUsers[0]
-      const expectedToken = jwt.sign(
-        { user_id: testUser.id }, 
-        process.env.JWT_SECRET, 
-        {
-          subject: testUser.user_name, 
-          algorithm: 'HS256'}
-      )
-      
       const newReview = {
         text: 'Test new review',
         rating: 3,
@@ -112,7 +97,7 @@ describe.only('Reviews Endpoints', function() {
 
         return supertest(app)
           .post('/api/reviews')
-          .set('Authorization', helpers.makeAuthHeader(testUser, expectedToken))
+          .set('Authorization', helpers.makeAuthHeader(testUser))
           .send(newReview)
           .expect(400, {
             error: `Missing '${field}' in request body`,
