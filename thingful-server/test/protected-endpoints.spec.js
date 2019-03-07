@@ -21,9 +21,9 @@ describe('Protected endpoints', function(){
   before('cleanup', () => helpers.cleanTables(db));
   afterEach('cleanup', () => helpers.cleanTables(db));
 
-  beforeEach('insert things', () => {
-    helpers.seedThingsTables(db, testUsers, testThings, testReviews);
-  });
+  beforeEach('insert things', () => 
+    helpers.seedThingsTables(db, testUsers, testThings, testReviews)
+  );
 
   const protectedEndpoints = [
     {

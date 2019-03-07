@@ -3,7 +3,7 @@ const app = require('../src/app')
 const helpers = require('./test-helpers')
 const jwt = require('jsonwebtoken')
 
-describe.only('Reviews Endpoints', function() {
+describe('Reviews Endpoints', function() {
   let db
 
   const {
@@ -48,7 +48,7 @@ describe.only('Reviews Endpoints', function() {
 
       return supertest(app)
         .post('/api/reviews')
-        .set('Authorization', helpers.makeAuthHeader(testUser))
+        .set('authorization', helpers.makeAuthHeader(testUser))
         .send(newReview)
         .expect(201)
         .expect(res => {
@@ -97,7 +97,7 @@ describe.only('Reviews Endpoints', function() {
 
         return supertest(app)
           .post('/api/reviews')
-          .set('Authorization', helpers.makeAuthHeader(testUser))
+          .set('authorization', helpers.makeAuthHeader(testUser))
           .send(newReview)
           .expect(400, {
             error: `Missing '${field}' in request body`,
